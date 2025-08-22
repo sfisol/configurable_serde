@@ -1,0 +1,19 @@
+[package]
+name = "configurable_serde"
+version = "0.1.0"
+description = "A proc-macro to apply reusable serde configurations."
+license.workspace = true
+edition.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+# This crate depends on the macro implementation crate.
+configurable_serde_macros = { version = "0.1.0", path = "../configurable_serde_macros" }
+
+[dev-dependencies]
+# Serde is only a dev-dependency here because this crate's only job
+# is to export the macro. The end-user will have their own serde dependency.
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

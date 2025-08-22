@@ -1,0 +1,13 @@
+[workspace]
+members = [
+    "configurable_serde",
+    "configurable_serde_macros",
+]
+resolver = "2"
+
+[workspace.package]
+license = "MIT OR Apache-2.0"
+edition = "2024"
+homepage = "https://github.com/sfisol/configurable_serde"
+repository = "https://github.com/sfisol/configurable_serde"
+documentation = "https://docs.rs/configurable_serde"
