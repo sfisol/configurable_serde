@@ -4,9 +4,13 @@ version = "0.1.0"
 description = "A proc-macro to apply reusable serde configurations."
 license.workspace = true
 edition.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
 documentation.workspace = true
 homepage.workspace = true
 repository.workspace = true
+categories.workspace = true
 
 [dependencies]
 # This crate depends on the macro implementation crate.
