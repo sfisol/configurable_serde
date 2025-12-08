@@ -3,11 +3,11 @@ on: [push]
 
 jobs:
   nightly-clippy:
-    name: Nightly Clippy
+    name: Nightly Clippy/Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Cache Cargo registry
         uses: actions/cache@v3
@@ -29,50 +29,24 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          components: clippy
+          components: clippy, rustfmt
           override: true
+
+      - name: Fmt
+        run: cargo fmt --verbose --check --all
 
       - name: Run Clippy
         run: cargo clippy -- -D warnings
 
-  nightly-test:
-    name: Nightly Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Cargo registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-
-      - name: Cache Cargo build
-        uses: actions/cache@v3
-        with:
-          path: target
-          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-build-
-
-      - name: Set up Rust Nightly
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-
-      - name: Run Cargo Tests
+      - name: Run Tests
         run: cargo test --all-features
 
   stable-clippy:
-    name: Stable Clippy
+    name: Stable Clippy/Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Cache Cargo registry
         uses: actions/cache@v3
@@ -100,34 +74,5 @@ jobs:
       - name: Run Clippy
         run: cargo clippy -- -D warnings
 
-  stable-test:
-    name: Stable Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Cargo registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-
-      - name: Cache Cargo build
-        uses: actions/cache@v3
-        with:
-          path: target
-          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-build-
-
-      - name: Set up Rust Stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-
-      - name: Run Cargo Tests
+      - name: Run Tests
         run: cargo test --all-features
