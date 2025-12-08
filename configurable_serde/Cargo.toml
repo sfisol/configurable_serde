@@ -17,6 +17,7 @@ categories.workspace = true
 configurable_serde_macros = { version = "0.1.0", path = "../configurable_serde_macros" }
 
 [dev-dependencies]
+chrono = "0.4.42"
 # Serde is only a dev-dependency here because this crate's only job
 # is to export the macro. The end-user will have their own serde dependency.
 serde = { version = "1.0", features = ["derive"] }

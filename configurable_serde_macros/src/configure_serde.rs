@@ -30,6 +30,14 @@ struct MacroArgs {
     /// If present, adds `#[serde(deny_unknown_fields)]` to the container.
     #[darling(default)]
     deny_unknown_fields: bool,
+
+    /// If present, adds `#[serde(with = "value")]` to any field of type `DateTime<Utc>`.
+    #[darling(default)]
+    date_format: Option<String>,
+
+    /// If present, adds `#[serde(with = "value")]` to any field of type `Option<DateTime<Utc>>`.
+    #[darling(default)]
+    optional_date_format: Option<String>,
 }
 
 /// Macro entry function
@@ -112,6 +120,37 @@ fn apply_to_struct(s: &mut syn::ItemStruct, args: &MacroArgs) -> Result<(), syn:
             {
                 field_attrs.push(quote! { default, skip_serializing_if = "Option::is_none" });
             }
+        }
+
+        // Apply `date_format` if the field is `DateTime<Utc>`.
+        if let Some(format_module) = &args.date_format
+            && let syn::Type::Path(type_path) = &field.ty
+            && type_path.qself.is_none()
+            && let Some(segment) = type_path.path.segments.last()
+            && segment.ident == "DateTime"
+        {
+            // Check generic argument (any TimeZone)
+            if let syn::PathArguments::AngleBracketed(args) = &segment.arguments
+                && !args.args.is_empty()
+            {
+                field_attrs.push(quote! { with = #format_module });
+            }
+        }
+
+        // Apply `optional_date_format` if the field is `Option<DateTime<Utc>>`.
+        if let Some(format_module) = &args.optional_date_format
+            && let syn::Type::Path(type_path) = &field.ty
+            && type_path.qself.is_none()
+            && let Some(segment) = type_path.path.segments.last()
+            && segment.ident == "Option"
+            && let syn::PathArguments::AngleBracketed(args) = &segment.arguments
+            && let Some(syn::GenericArgument::Type(syn::Type::Path(inner_path))) = args.args.first()
+            && let Some(inner_segment) = inner_path.path.segments.last()
+            && inner_segment.ident == "DateTime"
+            && let syn::PathArguments::AngleBracketed(inner_args) = &inner_segment.arguments
+            && !inner_args.args.is_empty()
+        {
+            field_attrs.push(quote! { with = #format_module });
         }
 
         // If we have any field attributes, create and add them.

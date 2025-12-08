@@ -109,6 +109,14 @@ Other way is to place your configs in a separate file, f.ex.
 
   If present, adds `#[serde(deny_unknown_fields)]` to the container.
 
+* **`date_format: Option<String>`**
+
+  If present, adds `#[serde(with = "value")]` to any field of type `DateTime<T>`.
+
+* **`optional_date_format: Option<String>`**
+
+  If present, adds `#[serde(with = "value")]` to any field of type `Option<DateTime<T>>`.
+
 ## Manual Usage of `configure_serde` macro
 
 ```rust
