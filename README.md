@@ -117,6 +117,13 @@ Other way is to place your configs in a separate file, f.ex.
 
   If present, adds `#[serde(with = "value")]` to any field of type `Option<DateTime<T>>`.
 
+* **`format_type(Type, "formatter_path")`**
+
+  If present, adds `#[serde(with = "formatter_path")]` to any field of type `Type`.
+  This option can be used multiple times to define rules for different types.
+
+  Example: `format_type(Option<Decimal>, "rust_decimal::serde::arbitrary_precision_option")`
+
 ## Manual Usage of `configure_serde` macro
 
 ```rust
