@@ -54,7 +54,7 @@ dependencies = [
 
 [[package]]
 name = "configurable_serde"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "chrono",
  "configurable_serde_macros",
@@ -64,7 +64,7 @@ dependencies = [
 
 [[package]]
 name = "configurable_serde_macros"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "darling",
  "proc-macro-error",

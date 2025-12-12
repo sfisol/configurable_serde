@@ -1,6 +1,6 @@
 [package]
 name = "configurable_serde_macros"
-version = "0.1.0"
+version = "0.1.1"
 description = "A proc-macro to apply reusable serde configurations - macros."
 license.workspace = true
 edition.workspace = true
